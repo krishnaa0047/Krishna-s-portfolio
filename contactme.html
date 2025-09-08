@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact | Krishna's Portfolio</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>
+    :root {
+      --bg-color: #89cff5;
+      --text-color: #222;
+      --accent-color: #6220ef;
+      --card-bg: #eaeef7;
+    }
+
+    body.dark-mode {
+      --bg-color: #121212;
+      --text-color: #f9f9f9;
+      --card-bg: #1e1e1e;
+      --accent-color: #ff4d6d;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    body {
+      background: var(--bg-color);
+      color: var(--text-color);
+      transition: .3s;
+      opacity: 0;
+    }
+
+    body.fade-in {
+      opacity: 1;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background: var(--card-bg);
+      position: sticky;
+      top: 0;
+      z-index: 1100;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+      font-weight: bold;
+      color: var(--accent-color);
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 25px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-color);
+      transition: .3s;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent-color);
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 25px;
+      height: 20px;
+      cursor: pointer;
+      z-index: 1101;
+    }
+
+    .hamburger span {
+      height: 3px;
+      width: 100%;
+      background: var(--text-color);
+      border-radius: 5px;
+      transition: .4s;
+    }
+
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, .5);
+      display: none;
+      z-index: 900;
+    }
+
+    .overlay.show {
+      display: block;
+    }
+
+    @media(max-width:768px) {
+      .nav-links {
+        position: fixed;
+        top: 0;
+        left: -250px;
+        height: 100vh;
+        width: 250px;
+        background: var(--card-bg);
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 80px 20px;
+        border-right: 1px solid rgba(0, 0, 0, 0.1);
+        box-shadow: 4px 0 10px rgba(0, 0, 0, 0.15);
+        transition: .4s;
+        z-index: 1000;
+      }
+
+      .nav-links.show {
+        left: 0;
+      }
+
+      .nav-links li {
+        margin: 15px 0;
+        width: 100%;
+      }
+
+      .nav-links a {
+        display: block;
+        width: 100%;
+        padding: 10px 0;
+        font-size: 18px;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .logo {
+        flex: 1;
+        text-align: center;
+      }
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 55px;
+      height: 28px;
+      margin-left: 20px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--card-bg);
+      border: 2px solid var(--accent-color);
+      border-radius: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 0 5px;
+      transition: .4s;
+    }
+
+    .slider .icon {
+      font-size: 14px;
+      color: var(--text-color);
+      transition: .4s;
+    }
+
+    .switch input:checked+.slider {
+      background: var(--accent-color);
+      justify-content: flex-end;
+    }
+
+    .switch input:checked+.slider .icon {
+      transform: rotate(360deg);
+      color: #fff700;
+    }
+
+    .main-section {
+      padding: 60px 10%;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      background: var(--card-bg);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    }
+
+    form input,
+    form textarea {
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      background: transparent;
+      color: var(--text-color);
+    }
+
+    form button {
+      padding: 12px;
+      background: var(--accent-color);
+      border: none;
+      color: #fff;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: .3s;
+    }
+
+    form button:hover {
+      opacity: .9;
+    }
+
+    .success-msg {
+      color: green;
+      font-weight: bold;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      background: var(--card-bg);
+      margin-top: 40px;
+    }
+
+    /* Loader */
+    .loader-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      transition: opacity .4s;
+    }
+
+    .loader-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .loader-text {
+      font-size: 48px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      animation: pulse 1.2s infinite ease-in-out, glowShift 3s infinite alternate;
+      background: linear-gradient(90deg, #a020f0, #ff007f, #00e5ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        opacity: .7
+      }
+
+      50% {
+        transform: scale(1.2);
+        opacity: 1
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: .7
+      }
+    }
+
+    @keyframes glowShift {
+      0% {
+        text-shadow: 0 0 10px #a020f0, 0 0 20px #a020f0, 0 0 40px #a020f0
+      }
+
+      50% {
+        text-shadow: 0 0 10px #ff007f, 0 0 20px #ff007f, 0 0 40px #ff007f
+      }
+
+      100% {
+        text-shadow: 0 0 10px #00e5ff, 0 0 20px #00e5ff, 0 0 40px #00e5ff
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Loader -->
+  <div class="loader-overlay" id="loader">
+    <div class="loader-text">KT</div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+    <div class="logo">Krishna's Portfolio</div>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="portfolio.html">Home</a></li>
+      <li><a href="project.html">Projects</a></li>
+      <li><a href="contactme.html">Contact</a></li>
+      <li><label class="switch"><input type="checkbox" id="darkModeToggle"><span class="slider"><span
+              class="icon">🌙</span></span></label></li>
+    </ul>
+  </nav>
+  <div class="overlay" id="overlay"></div>
+
+  <!-- Main Section -->
+  <section class="main-section">
+    <h2 style="text-align:center;margin-bottom:30px;">Contact Me</h2>
+    <form id="contactForm" action="https://formspree.io/f/mqadgjwe" method="POST">
+      <input type="text" name="name" placeholder="Your Name" required>
+      <input type="email" name="email" placeholder="Your Email" required>
+      <input type="text" name="subject" placeholder="Subject" required>
+      <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+      <button type="submit">Send Message</button>
+      <div class="success-msg" id="successMessage" style="display:none;">✅ Your message has been sent!</div>
+    </form>
+  </section>
+
+  <footer>
+    <p>© 2025 Krishna's Portfolio | All Rights Reserved</p>
+  </footer>
+
+  <script>
+    // Dark mode
+    const toggleInput = document.getElementById("darkModeToggle");
+    const icon = document.querySelector(".slider .icon");
+    if (localStorage.getItem("theme") === "dark") { document.body.classList.add("dark-mode"); toggleInput.checked = true; icon.textContent = "☀️"; } else { icon.textContent = "🌙"; }
+    toggleInput.addEventListener("change", () => { document.body.classList.toggle("dark-mode"); if (document.body.classList.contains("dark-mode")) { localStorage.setItem("theme", "dark"); icon.textContent = "☀️"; } else { localStorage.setItem("theme", "light"); icon.textContent = "🌙"; } });
+
+    // Hamburger menu
+    const hamburger = document.getElementById("hamburger"), navLinks = document.getElementById("nav-links"), overlay = document.getElementById("overlay");
+    hamburger.addEventListener("click", () => { navLinks.classList.toggle("show"); hamburger.classList.toggle("active"); overlay.classList.toggle("show"); });
+    overlay.addEventListener("click", () => { navLinks.classList.remove("show"); hamburger.classList.remove("active"); overlay.classList.remove("show"); });
+
+    // Page loader & transitions
+    const loader = document.getElementById("loader");
+    window.addEventListener("load", () => { setTimeout(() => { loader.classList.add("hidden"); document.body.classList.add("fade-in"); }, 600); });
+    document.querySelectorAll("a").forEach(link => { if (link.hostname === window.location.hostname) { link.addEventListener("click", function (e) { if (this.getAttribute("href").startsWith("#")) return; e.preventDefault(); const target = this.href; loader.classList.remove("hidden"); document.body.classList.remove("fade-in"); setTimeout(() => { window.location.href = target; }, 600); }); } });
+
+    // Form submission success message
+    const form = document.getElementById("contactForm");
+    const successMsg = document.getElementById("successMessage");
+    form.addEventListener("submit", (e) => { e.preventDefault(); fetch(form.action, { method: form.method, body: new FormData(form), headers: { "Accept": "application/json" } }).then(res => { if (res.ok) { successMsg.style.display = "block"; form.reset(); } else { alert("Oops! There was a problem."); } }).catch(() => alert("Oops! There was a problem.")); });
+  </script>
+</body>
+
+</html>
